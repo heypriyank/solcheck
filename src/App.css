@@ -1,7 +1,6 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -39,4 +38,10 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.placeholder-middle::placeholder {
+  text-align: center;
+  vertical-align: middle;
+  line-height: inherit; /* To ensure line height matches input height */
 }
