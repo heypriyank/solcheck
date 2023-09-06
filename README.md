@@ -1,3 +1,7 @@
+# SOL Checker
+Can check solana balance and some more information for the provided solana address.
+Uses [Syndica.io](https://app.syndica.io/) RPC for reliability.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

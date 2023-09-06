@@ -1,104 +1,91 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-    Connection,
-    PublicKey,
-    LAMPORTS_PER_SOL,
-    AccountInfo,
+  Connection,
+  PublicKey,
+  LAMPORTS_PER_SOL,
+  //@ts-ignore
 } from "@solana/web3.js";
-import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { typingSimulator } from "node-typing-simulator";
 
-const KEY = import.meta.env.VITE_SYNDICA_KEY;
-const URLS = {
-    MAINNET: `https://solana-api.syndica.io/access-token/${KEY}/rpc`,
-    TESTNET: "https://api.testnet.solana.com",
-    DEVNET: "https://api.devnet.solana.com",
-};
 
 interface RpcResponse {
-    data: Buffer;
-    executable: boolean;
-    lamports: number;
-    owner: PublicKey;
-    rentEpoch: number;
+  data: Buffer;
+  executable: boolean;
+  lamports: number;
+  owner: PublicKey;
+  rentEpoch: number;
 }
 
-const Main: React.FC = () => {
-    const sentences = [
-        "Hello, how are you?",
-        "I'm a typing simulator.",
-        "This is a test sentence.",
-    ];
-    const timeout = 1000;
-    const typingSpeed = 100;
-    const mistakeProbability = 0;
-    const [address, setAddress] = useState<string>("");
-    const [data, setData] = useState<RpcResponse>();
-    const [balance, setBalance] = useState<number>();
-    const [placeholderText, setPlaceHolderText] = useState<string>("");
+interface Props {
+    url: string
+}
 
-    let connection = new Connection(URLS.MAINNET, "confirmed");
+const Main = (props: Props) => {
+  const [address, setAddress] = useState<string>("");
+  const [data, setData] = useState<RpcResponse>();
+  const [balance, setBalance] = useState<number>();
+  const [showData, setShowData] = useState(false);
 
-    useEffect(() => {
-        typingSimulator(
-            sentences,
-            timeout,
-            typingSpeed,
-            mistakeProbability,
-            setPlaceHolderText
-        );
-    }, []);
+  useEffect(() => {
+    setShowData(false)
+  }, [props.url])
 
-    const fetchInfo = async (address: String) => {
-        const TARGET_KEY = new PublicKey(address);
-        const data = await connection.getAccountInfo(TARGET_KEY);
-        setData(data);
-        setBalance(data.lamports / LAMPORTS_PER_SOL);
+  let connection = new Connection(props.url, "confirmed");
+
+  const fetchInfo = async (address: string) => {
+    const TARGET_KEY = new PublicKey(address);
+    const data: any = await connection.getAccountInfo(TARGET_KEY);
+    if(data) {
+        setData(data)
+        setBalance(data?.lamports / LAMPORTS_PER_SOL);
         return "Data Fetched!";
-    };
+    } else {
+        throw new Error()
+    }
+  };
 
-    const handleEnter = () => {
-        if (address.length < 32 || address.length > 44) {
-            toast("Not a valid sol address!!");
-            return;
-        }
-        toast("Fetching data...");
-        fetchInfo(address)
-            .then((res) => {
-                toast(res);
-            })
-            .catch((err) => {
-                toast("Some error occured 😢");
-            });
-    };
+  const handleEnter = () => {
+    if (address.length < 32 || address.length > 44) {
+      toast("Please enter a valid Solana address!");
+      return;
+    }
+    toast("Fetching data...");
+    fetchInfo(address)
+      .then((res) => {
+        toast(res);
+        setShowData(true);
+      })
+      .catch((err) => {
+        toast("Data not found");
+      });
+  };
 
-    return (
-        <>
-            <div className="h-3/4 w-5/6 bg-black rounded-3xl">
-                <input
-                    className="p-2 text-center rounded-3xl w-3/4 h-10 mt-5 placeholder-middle focus:outline-none"
-                    type="text"
-                    placeholder={placeholderText}
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    onKeyDown={(e) => (e.key === "Enter" ? handleEnter() : "")}
-                />
-                {data ? (
-                    <div className="">
-                        <span>Balance: {balance} SOL</span>
-                        <span>Is Executable: {data.executable}</span>
-                        <span>Rent EPOCH: {data.rentEpoch}</span>
-                    </div>
-                ) : (
-                    ""
-                )}
-            </div>
-            <ToastContainer />
-        </>
-    );
+  return (
+    <>
+      <div className={`h-3/4 max-sm:h-3/6 w-5/6 max-sm:w-96 bg-black rounded-3xl flex justify-center items-center flex-col relative`}>
+        <input
+            spellCheck="false"
+          className={`p-2 text-center rounded-full w-3/4 max-sm:w-11/12 h-14 placeholder-middle focus:outline-none transition-transform duration-500 ${
+            showData ? "-translate-y-3/4 max-sm:-translate-y-60" : "translate-y-0"
+          }`}
+          type="text"
+          placeholder="enter Solana address here and hit return..."
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          onKeyDown={(e) => (e.key === "Enter" ? handleEnter() : "")}
+        />
+        {showData && data ? (
+          <div className="m-10 animate-fadeIn">
+            <p className="m-10 text-3xl text-left border-b-2">Balance: {balance} SOL</p>
+            <p className="m-10 text-3xl text-left border-b-2">Is Executable: {data.executable ? "Yes" : "No"}</p>
+            <p className="m-10 text-3xl text-left border-b-2">Rent EPOCH: {data.rentEpoch}</p>
+          </div>
+        ) : null}
+      </div>
+      <ToastContainer autoClose={300} draggable />
+    </>
+  );
 };
 
 export default Main;
-// HwAeUv6aWwLZfqJHapXAAUbJvrSHAb4iKF1CEs55nYih

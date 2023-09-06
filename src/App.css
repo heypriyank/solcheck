@@ -45,3 +45,12 @@
   vertical-align: middle;
   line-height: inherit; /* To ensure line height matches input height */
 }
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

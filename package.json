@@ -10,9 +10,11 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@metaplex-foundation/js": "^0.19.4",
+        "@nfteyez/sol-rayz": "^0.10.2",
         "@solana/spl-token": "^0.3.8",
         "@solana/web3.js": "^1.78.4",
-        "node-typing-simulator": "^1.1.0",
+        "node-typing-simulator": "^1.1.3",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-toastify": "^9.1.3"
