@@ -10,6 +10,9 @@ export default {
                 xl: "1280px", // Extra-large screens (default)
                 "2xl": "1536px", // Custom breakpoint for 2xl screens
             },
+            backgroundColor: {
+                'input-grey': '#3B3B3B',
+              },
         },
     },
     plugins: [],

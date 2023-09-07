@@ -21,6 +21,8 @@ interface Props {
     url: string
 }
 
+const pClass = "m-10 max-sm:m-5 text-3xl max-sm:text-xl text-left border-2 p-5 max-sm:p-2 rounded-3xl"
+
 const Main = (props: Props) => {
   const [address, setAddress] = useState<string>("");
   const [data, setData] = useState<RpcResponse>();
@@ -56,7 +58,7 @@ const Main = (props: Props) => {
         toast(res);
         setShowData(true);
       })
-      .catch((err) => {
+      .catch(() => {
         toast("Data not found");
       });
   };
@@ -66,8 +68,8 @@ const Main = (props: Props) => {
       <div className={`h-3/4 max-sm:h-3/6 w-5/6 max-sm:w-96 bg-black rounded-3xl flex justify-center items-center flex-col relative`}>
         <input
             spellCheck="false"
-          className={`p-2 text-center rounded-full w-3/4 max-sm:w-11/12 h-14 placeholder-middle focus:outline-none transition-transform duration-500 ${
-            showData ? "-translate-y-3/4 max-sm:-translate-y-60" : "translate-y-0"
+          className={`p-2 text-center bg-input-grey w-full h-14 placeholder-middle focus:outline-none transition-transform duration-500 ${
+            showData ? "-translate-y-3/4 max-sm:translate-y-10" : "translate-y-0"
           }`}
           type="text"
           placeholder="enter Solana address here and hit return..."
@@ -77,9 +79,9 @@ const Main = (props: Props) => {
         />
         {showData && data ? (
           <div className="m-10 animate-fadeIn">
-            <p className="m-10 text-3xl text-left border-b-2">Balance: {balance} SOL</p>
-            <p className="m-10 text-3xl text-left border-b-2">Is Executable: {data.executable ? "Yes" : "No"}</p>
-            <p className="m-10 text-3xl text-left border-b-2">Rent EPOCH: {data.rentEpoch}</p>
+            <p className={pClass}>Balance:       {balance} SOL</p>
+            <p className={pClass}>Is Executable: {data.executable ? "Yes" : "No"}</p>
+            <p className={pClass}>Rent EPOCH:    {data.rentEpoch}</p>
           </div>
         ) : null}
       </div>

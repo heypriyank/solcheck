@@ -17,7 +17,7 @@ const sentences = [
 ];
 
 const timeout = 2000;
-const typingSpeed = 120;
+const typingSpeed = 80;
 const mistakeProbability = 0;
 
 type labelValues = "left" | "center" | "right"

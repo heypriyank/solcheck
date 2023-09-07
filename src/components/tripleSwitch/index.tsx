@@ -65,7 +65,7 @@ class TripleToggleSwitch extends Component<
         const { labels } = this.props;
 
         return (
-            <div className="main-container bottom-2 max-sm:bottom-16">
+            <div className="main-container bottom-2 max-sm:bottom-4">
                 <div
                     className={`switch ${this.state.animation} ${this.state.switchPosition}-position`}
                 ></div>
